@@ -46,11 +46,15 @@ class Card
 end
 
 class Deck
-    attr_writer :cards
+    attr_reader :cards
 
     def initialize
         @cards = []
         build_cards
+    end
+
+    def take!
+        @cards.shift
     end
 
     private
@@ -66,3 +70,27 @@ class Deck
         @cards.shuffle!
     end
 end
+
+class Hand
+    attr_reader :cards
+
+    def initialize(deck)
+        @deck = deck
+        @cards = []
+    end
+
+    def hit!
+        @cards << @deck.take!
+    end
+
+end
+
+deck = Deck.new
+hand = Hand.new(deck)
+
+puts "La baraja tiene #{deck.cards.length} cartas"
+puts "La mano tiene #{hand.cards.length} cartas"
+hand.hit!
+
+puts "La baraja tiene #{deck.cards.length} cartas"
+puts "La mano tiene #{hand.cards.length} cartas"
