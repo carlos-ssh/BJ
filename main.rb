@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Card
   attr_reader :suit, :value
 
@@ -10,13 +11,13 @@ class Card
   def the_value
     return 10 if %w[J Q K].include?(value)
     return 11 if @value == 'A'
-    return @value
+
+    @value
   end
 
   def to_s
     "#{@value} - #{@suit}"
   end
-
 end
 
 class Deck
@@ -67,13 +68,12 @@ class Hand
   end
 
   def to_s
-    str = ""
+    str = ''
     @cards.each do |card|
-        str += "#{card}       "
+      str += "#{card}       "
     end
     str.strip
-  end  
-
+  end
 end
 
 #  1.- Repartir las cartas
@@ -111,3 +111,18 @@ dealer.hit!
 
 puts "repartidor: #{dealer}"
 puts "Jugador: #{player}"
+
+puts 'Your Turn: '
+
+while player.value < 21
+  print '  Card or Push ...press C or P   '
+  option = gets.chomp
+  if option == 'c'
+    player.hit!
+    puts "  #{player}"
+  elsif option == 'p'
+    break
+  end
+end
+
+puts "!!! #{player}"
