@@ -109,8 +109,8 @@ player.hit!
 player.hit!
 dealer.hit!
 
-puts "repartidor: #{dealer}"
-puts "Jugador: #{player}"
+puts "Dealer: #{dealer}"
+puts "Player: #{player}"
 
 puts 'Your Turn: '
 
@@ -125,4 +125,27 @@ while player.value < 21
   end
 end
 
-puts "!!! #{player}"
+puts
+puts 'Dealer Turn!'
+
+if player.value <= 21
+  dealer.hit!
+  puts "  #{dealer}"
+
+  while dealer.value < 17
+    dealer.hit!
+    puts "  #{dealer}"
+  end
+end
+
+if player.value > 21
+  puts 'You Loose! :('
+elsif dealer.value > 21
+  puts 'You Win!'
+elsif dealer.value == player.value
+  puts "It's a Draw"
+elsif dealer.value > player.value
+  puts 'You Loose! :('
+else
+  puts 'Winner Winner Chicken Dinner! :D'
+end
