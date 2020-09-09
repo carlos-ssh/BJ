@@ -60,7 +60,7 @@ class Hand
   end
 
   def value
-    val = 0
+    val = 0 
     @cards.each do |card|
       val += card.value
     end
@@ -109,10 +109,10 @@ player.hit!
 player.hit!
 dealer.hit!
 
-puts "Dealer: #{dealer}"
-puts "Player: #{player}"
-
-puts 'Your Turn: '
+puts "Dealer: #{dealer}\n"
+puts "Player: #{player}\n"
+puts
+puts "\nYour Turn: "
 
 while player.value < 21
   print '  Card or Push ...press C or P   '
@@ -120,15 +120,15 @@ while player.value < 21
   if option == 'c'
     player.hit!
     puts "  #{player}"
+    puts
   elsif option == 'p'
     break
   end
 end
 
-puts
-puts 'Dealer Turn!'
-
 if player.value <= 21
+  puts
+  puts 'Dealer Turn! \n'
   dealer.hit!
   puts "  #{dealer}"
 
