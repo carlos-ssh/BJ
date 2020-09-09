@@ -1,96 +1,113 @@
-=begin
- 1.- Repartir las cartas
-
- 2.- Preguntar al usuario si desea carta o se planta
-        Si pide carta:
-            Si se pasa, ir al punto 4
-            De lo contrario volver al punto 2        
-        Si se planta:
-            Ir al punto 3
-
- 3.- Determinar el valor que tiene el repartidor
-        Si ese valor < 17, entregarse otra carta
-            Si se pasa ir al punto 4
-            De lo contrario, volver al punto 3.
-        De lo contrario:
-            Ir al punto 4 .
-
- 4.- Determina el ganador
-        Sí el usuario se pasó, gana el repartidor.
-        Sí el repartidor se pasó, gana el usuario.
-        Sí el repartidor tiene mas que el usuario, gana el repartidor.
-        De lo contrario gana el usuario.
-
- 5.- Volver al punto uno (Nuevo juego.)   
-
-=end
-
-#Como representamos una carta (Figura y valor)
-#Como representamos una baraja compuesta de 52 cartas
-#Como representamos las cartas que tiene el jugador y el repartidor
-
+# frozen_string_literal: true
 class Card
-    attr_reader :suit, :value
+  attr_reader :suit, :value
 
-    def initialize(suit, value)
-        @suit = suit
-        @value = value
-    end
+  def initialize(suit, value)
+    @suit = suit
+    @value = value
+  end
 
-    def value
-        return 10 if ["J", "Q", "K"].include?(value)
-        return 11 if @value == "A"
-        return @value
-    end
+  def the_value
+    return 10 if %w[J Q K].include?(value)
+    return 11 if @value == 'A'
+    return @value
+  end
+
+  def to_s
+    "#{@value} - #{@suit}"
+  end
 
 end
 
 class Deck
-    attr_reader :cards
+  attr_reader :cards
 
-    def initialize
-        @cards = []
-        build_cards
-    end
+  def initialize
+    @cards = []
+    build_cards
+  end
 
-    def take!
-        @cards.shift
-    end
+  def take!
+    @cards.shift
+  end
 
-    private
-    def build_cards
-        [:clubs, :diamonds, :spades, :hearts].each do |suit|
-            (2..10).each do |number|
-                @cards << Card.new(suit, number)
-            end
-            ["J", "Q", "K", "A"].each do |face|
-                @cards << Card.new(suit, face)
-            end
-        end
-        @cards.shuffle!
+  private
+
+  def build_cards
+    %i[clubs diamonds spades hearts].each do |suit|
+      (2..10).each do |number|
+        @cards << Card.new(suit, number)
+      end
+      %w[J Q K A].each do |face|
+        @cards << Card.new(suit, face)
+      end
     end
+    @cards.shuffle!
+  end
 end
 
 class Hand
-    attr_reader :cards
+  attr_reader :cards
 
-    def initialize(deck)
-        @deck = deck
-        @cards = []
-    end
+  def initialize(deck)
+    @deck = deck
+    @cards = []
+  end
 
-    def hit!
-        @cards << @deck.take!
+  def hit!
+    @cards << @deck.take!
+  end
+
+  def value
+    val = 0
+    @cards.each do |card|
+      val += card.value
     end
+    val
+  end
+
+  def to_s
+    str = ""
+    @cards.each do |card|
+        str += "#{card}       "
+    end
+    str.strip
+  end  
 
 end
 
+#  1.- Repartir las cartas
+#
+#  2.- Preguntar al usuario si desea carta o se planta
+#         Si pide carta:
+#             Si se pasa, ir al punto 4
+#             De lo contrario volver al punto 2
+#         Si se planta:
+#             Ir al punto 3
+#
+#  3.- Determinar el valor que tiene el repartidor
+#         Si ese valor < 17, entregarse otra carta
+#             Si se pasa ir al punto 4
+#             De lo contrario, volver al punto 3.
+#         De lo contrario:
+#             Ir al punto 4 .
+#
+#  4.- Determina el ganador
+#         Si el usuario se paso, gana el repartidor.
+#         Si el repartidor se paso, gana el usuario.
+#         Si el repartidor tiene mas que el usuario, gana el repartidor.
+#         De lo contrario gana el usuario.
+#
+#  5.- Volver al punto uno (Nuevo juego.)
+#
+
 deck = Deck.new
-hand = Hand.new(deck)
+dealer = Hand.new(deck)
+player = Hand.new(deck)
 
-puts "La baraja tiene #{deck.cards.length} cartas"
-puts "La mano tiene #{hand.cards.length} cartas"
-hand.hit!
+player.hit!
+player.hit!
+dealer.hit!
 
-puts "La baraja tiene #{deck.cards.length} cartas"
-puts "La mano tiene #{hand.cards.length} cartas"
+puts "repartidor: #{dealer}"
+puts "Jugador: #{player}"
